@@ -56,13 +56,17 @@ const [userRole,setUserRole]= useState('')
 const reportType='day'
 
 
-
+let dateData=null
 
 
 const fetchSales= async(date,report,)=>{
 setIsPreLoaderRunning(true)
 
+if (date){
+ dateData= moment(date).tz('UTC').toDate();
+}
 
+console.log(dateData,'date-data s');
 
 const config={
   headers:{
@@ -78,15 +82,17 @@ const config={
 
     const response=  await axios.get(url,{withCredentials:true})
 
-    const t= response.data
+    console.log(response,'responsa');
+
+    const t= response.data.results
 
     
 
-    setSalesRecordData(response.data)
+    setSalesRecordData(response.data.results)
 
 
 
-    const structuredCostArray =response.data.map((item)=>{
+    const structuredCostArray =response.data.results.map((item)=>{
       let quantify;
        let structuredCost=null
       if(item.salesData.packages==='bulks'){
@@ -152,7 +158,7 @@ return {...item,structuredCost}
 
  
    
-    const tot= response.data.map((item)=>{
+    const tot= response.data.results.map((item)=>{
       let quantity=item.salesData.quantity
       if(item.salesData.packages==='bulks'){
        quantity=item.salesData.quantity/item.upb
@@ -168,7 +174,7 @@ return {...item,structuredCost}
 
     setTotal(tot)
 
-    const costSold= response.data.map((item)=>{
+    const costSold= response.data.results.map((item)=>{
       let quantity=item.salesData.quantity
       if(item.salesData.packages==='bulks'){
        quantity=item.salesData.quantity/item.upb
@@ -181,9 +187,9 @@ return {...item,structuredCost}
     })
 
 
-const utc=response.data.map((item)=>item.salesData.createdAt)
+const utc=response.data.results.map((item)=>item.salesData.createdAt)
 
-    const createdAt= response.data.map((item)=>moment.utc(item.salesData.createdAt).tz('Africa/Lagos').format(' HH:mm:ss ')   )
+    const createdAt= response.data.results.map((item)=>moment.utc(item.salesData.createdAt).tz('Africa/Lagos').format(' HH:mm:ss ')   )
     //const createdAts=moment.utc()
  
 
@@ -219,8 +225,10 @@ setIsPreLoaderRunning(false)
 
 useEffect(()=>{
 
-console.log(date,'date-real');
 
+
+
+// Now send `utcDate` to the backend
 
 
   fetchSales(date,reportType)
