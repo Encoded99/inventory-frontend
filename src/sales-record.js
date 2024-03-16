@@ -15,6 +15,7 @@ import axios from 'axios'
 
 
 import LayOut from './lay-out';
+import { logDOM } from '@testing-library/react';
 
 
 
@@ -218,7 +219,7 @@ setIsPreLoaderRunning(false)
 
 useEffect(()=>{
 
-
+console.log(date,'date-real');
 
 
 
