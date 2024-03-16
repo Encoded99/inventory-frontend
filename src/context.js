@@ -19,9 +19,9 @@ export const AppProvider=({children})=>{
    // const [state,dispatch]=useReducer(reducer,initialState)
     //sigcoIn state//
     const local='http://localhost:8080'
-    const hosted=process.env.HOST_URL
+    const hosted='https://hero-s1n5.onrender.com'
     
-    const prefix=local
+    const prefix=hosted
     const [count, setCount]= useState(1)
     const [tables,setTables]= useState([])
     const [finalCost,setFinalCost]=useState(0)
