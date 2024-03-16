@@ -565,8 +565,8 @@ let quantity=salesData.quantity
     quantity=salesData.quantity/item.upb
   }
 
-  //const momentTime= moment.utc(salesData.createdAt).tz('Africa/Lagos').format('YYYY-MM-DD HH:mm:ss');
-const momentTime=salesData.createdAt
+  const momentTime= moment.utc(salesData.createdAt).tz('Africa/Lagos').format('YYYY-MM-DD HH:mm:ss');
+
  return(
   <>
 
