@@ -56,166 +56,164 @@ const [userRole,setUserRole]= useState('')
 const reportType='day'
 
 
-let dateData=null
+
 
 
 
 const fetchSales= async(date,report,)=>{
-setIsPreLoaderRunning(true)
-
-if (date){
- dateData= moment(date).startOf(`${reportType}`).tz('UTC').toDate();
-}
-
-console.log(dateData,'date-data s');
-
-const config={
-  headers:{
-   'Content-Type': 'application/json',
- },
- 
- }
-
-
-  try{
-
-    const url=`${prefix}/products/fetch-sales/${date}/${report}`
-
-    const response=  await axios.get(url,{withCredentials:true})
-
-    console.log(response,'responsa');
-
-    const t= response.data.results
-
+  setIsPreLoaderRunning(true)
+  
+  
+  
+  const config={
+    headers:{
+     'Content-Type': 'application/json',
+   },
+   
+   }
+  
+  
+    try{
+  
+      const url=`${prefix}/products/fetch-sales/${date}/${report}`
+  
+      const response=  await axios.get(url,{withCredentials:true})
+  
+      const t= response.data
+  
+      
+  
+      setSalesRecordData(response.data)
+  
+  
+  
+      const structuredCostArray =response.data.map((item)=>{
+        let quantify;
+         let structuredCost=null
+        if(item.salesData.packages==='bulks'){
+          quantify=item.salesData.quantity/item.upb
+         structuredCost= quantify*item.salesData.ppu
+         }
+   
+         else{
+         structuredCost= item.salesData.quantity*item.salesData.ppu
+         }
+  
+  return {...item,structuredCost}
+  
+  
+      })
+  
     
-
-    setSalesRecordData(response.data.results)
-
-
-
-    const structuredCostArray =response.data.results.map((item)=>{
-      let quantify;
-       let structuredCost=null
-      if(item.salesData.packages==='bulks'){
-        quantify=item.salesData.quantity/item.upb
-       structuredCost= quantify*item.salesData.ppu
-       }
- 
-       else{
-       structuredCost= item.salesData.quantity*item.salesData.ppu
-       }
-
-return {...item,structuredCost}
-
-
-    })
-
   
-
+     
+  
+      const newStructuredArray=[]
+  
+  
+  
+      for (let i=0;i<structuredCostArray.length;i++){
+  
+      const element=structuredCostArray[i]
+     const  doesDuplicateExist =newStructuredArray.some((item)=>item._id===element._id)
+  
+  
+     if(!doesDuplicateExist){
+      newStructuredArray.push(element)
+     }
+  
+  
+     else {
+  
+     const similarItem= newStructuredArray.find((item)=>item._id===element._id)
+  
+  
+     similarItem.structuredCost+=element.structuredCost
+  
+    
+  
+     }
+  
+  
+  
+      }
+  
+    
+    
+  
+      setStructuredData(newStructuredArray)
+  
+      const s= newStructuredArray.sort((a,b)=>b.structuredCost-a.structuredCost).slice(0,3)
+  
+     
+  
+  
+      setMostSold(s)
+  
+  
    
-
-    const newStructuredArray=[]
-
-
-
-    for (let i=0;i<structuredCostArray.length;i++){
-
-    const element=structuredCostArray[i]
-   const  doesDuplicateExist =newStructuredArray.some((item)=>item._id===element._id)
-
-
-   if(!doesDuplicateExist){
-    newStructuredArray.push(element)
-   }
-
-
-   else {
-
-   const similarItem= newStructuredArray.find((item)=>item._id===element._id)
-
-
-   similarItem.structuredCost+=element.structuredCost
-
+     
+      const tot= response.data.map((item)=>{
+        let quantity=item.salesData.quantity
+        if(item.salesData.packages==='bulks'){
+         quantity=item.salesData.quantity/item.upb
+          return quantity*item.salesData.ppu
+        }
   
-
-   }
-
-
-
+        else{
+          return quantity*item.salesData.ppu
+        }
+      }).reduce((acc,cv)=>{
+        return acc + cv
+      },0)
+  
+      setTotal(tot)
+  
+      const costSold= response.data.map((item)=>{
+        let quantity=item.salesData.quantity
+        if(item.salesData.packages==='bulks'){
+         quantity=item.salesData.quantity/item.upb
+          return quantity*item.salesData.ppu
+        }
+  
+        else{
+          return quantity*item.salesData.ppu
+        }
+      })
+  
+  
+  const utc=response.data.map((item)=>item.salesData.createdAt)
+  
+      const createdAt= response.data.map((item)=>moment.utc(item.salesData.createdAt).tz('Africa/Lagos').format(' HH:mm:ss ')   )
+      //const createdAts=moment.utc()
+   
+  
+  const reversedCreatedAt=createdAt.reverse()
+  const reversedCostSold= costSold.reverse()
+   
+  
+  
+  
+  
+     setSalesXaxis(createdAt)
+     setSalesYaxis(costSold)
+  
+  setIsPreLoaderRunning(false)
+  
+  
     }
-
   
   
-
-    setStructuredData(newStructuredArray)
-
-    const s= newStructuredArray.sort((a,b)=>b.structuredCost-a.structuredCost).slice(0,3)
-
-   
-
-
-    setMostSold(s)
-
-
- 
-   
-    const tot= response.data.results.map((item)=>{
-      let quantity=item.salesData.quantity
-      if(item.salesData.packages==='bulks'){
-       quantity=item.salesData.quantity/item.upb
-        return quantity*item.salesData.ppu
-      }
-
-      else{
-        return quantity*item.salesData.ppu
-      }
-    }).reduce((acc,cv)=>{
-      return acc + cv
-    },0)
-
-    setTotal(tot)
-
-    const costSold= response.data.results.map((item)=>{
-      let quantity=item.salesData.quantity
-      if(item.salesData.packages==='bulks'){
-       quantity=item.salesData.quantity/item.upb
-        return quantity*item.salesData.ppu
-      }
-
-      else{
-        return quantity*item.salesData.ppu
-      }
-    })
-
-
-const utc=response.data.results.map((item)=>item.salesData.createdAt)
-
-    const createdAt= response.data.results.map((item)=>moment.utc(item.salesData.createdAt).tz('Africa/Lagos').format(' HH:mm:ss ')   )
-    //const createdAts=moment.utc()
- 
-
-const reversedCreatedAt=createdAt.reverse()
-const reversedCostSold= costSold.reverse()
- 
-
-
-
-
-   setSalesXaxis(createdAt)
-   setSalesYaxis(costSold)
-
-setIsPreLoaderRunning(false)
-
-
+    catch(err){
+  
+    
+  
+    }
   }
-
-
-  catch(err){
-
   
-
-  }
-}
+  
+  
+  
 
 
 
@@ -583,7 +581,7 @@ let quantity=salesData.quantity
   <div className='sales-info' key={keys}  style={{border:salesData._id===salesId?'solid red 2px':''}}>
    
   <div className='sales-element'>{item.sku}</div>
-  <div  className='sales-element'>{item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()}</div>
+  <div  className='sales-element'>{item.name.length<25 ?   item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase():item.name.charAt(0).toUpperCase() + item.name.slice(1,25).toLowerCase() + '..'}</div>
   <div  className='sales-element'>{item.salesData.packages.charAt(0).toUpperCase() + item.salesData.packages.slice(1).toLowerCase()}</div>
   <div  className='sales-element'>{quantity}</div>
   <div  className='sales-element'>{item.salesData.ppu}</div>
