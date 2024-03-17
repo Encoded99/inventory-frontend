@@ -825,12 +825,18 @@ const SalesOrder=()=>{
 const {tables,setTables,finalCost,collatedData,arrangeCostData,costData,setCostData,prefix,apiError,setApiError}=useGlobal()
 const navigate= useNavigate()
 
+const timestampInMilliseconds = Date.now();
+const timestampInSeconds = Math.floor(timestampInMilliseconds / 1000);
+
+const dateValue = new Date(timestampInSeconds * 1000);
+
+
 
 const [renderTables, setRenderTables] = useState(false);
 
 const [message,setMessage] =useState('')
 const [lowFinalCost, setLowFinalCost]=useState(false)
-const [transactionDate,setTransactionDate]=useState(null)
+const [transactionDate,setTransactionDate]=useState(dateValue)
 const [userRole,setUserRole]= useState('')
 
 
@@ -889,6 +895,13 @@ const resetLoadingText=()=>{
 
 
 const recordSales=async(data,id,)=>{
+
+
+
+
+  console.log(transactionDate,'transaction-date laf');
+
+  
  
  if (transactionDate){
   data.date= transactionDate
@@ -909,7 +922,7 @@ const recordSales=async(data,id,)=>{
  try{
  
   const response= await axios.post(url,data,config)
-
+console.log(response,'reponse for record sales');
  
  }
  
