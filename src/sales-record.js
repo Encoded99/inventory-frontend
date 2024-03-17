@@ -85,8 +85,6 @@ const fetchSales= async(date,report,)=>{
   
       setSalesRecordData(response.data)
   
-  
-  
       const structuredCostArray =response.data.map((item)=>{
         let quantify;
          let structuredCost=null
@@ -573,7 +571,7 @@ let quantity=salesData.quantity
     quantity=salesData.quantity/item.upb
   }
 
-  const momentTime= moment.utc(salesData.createdAt).tz('Africa/Lagos').format('YYYY-MM-DD HH:mm:ss');
+  const momentTime= moment.utc(salesData.createdAt).tz('Africa/Lagos').format('HH:mm:ss');
 
  return(
   <>
@@ -581,7 +579,7 @@ let quantity=salesData.quantity
   <div className='sales-info' key={keys}  style={{border:salesData._id===salesId?'solid red 2px':''}}>
    
   <div className='sales-element'>{item.sku}</div>
-  <div  className='sales-element'>{item.name.length<25 ?   item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase():item.name.charAt(0).toUpperCase() + item.name.slice(1,25).toLowerCase() + '..'}</div>
+  <div  className='sales-element sales-name'>{item.name.length<25 ?   item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase():item.name.charAt(0).toUpperCase() + item.name.slice(1,25).toLowerCase() + '..'}</div>
   <div  className='sales-element'>{item.salesData.packages.charAt(0).toUpperCase() + item.salesData.packages.slice(1).toLowerCase()}</div>
   <div  className='sales-element'>{quantity}</div>
   <div  className='sales-element'>{item.salesData.ppu}</div>
