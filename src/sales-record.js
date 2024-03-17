@@ -56,17 +56,20 @@ const [userRole,setUserRole]= useState('')
 const reportType='day'
 
 
-let dateData=null
+const data={
+
+}
 
 
 const fetchSales= async(date,report,)=>{
 setIsPreLoaderRunning(true)
 
 if (date){
- dateData= moment(date).tz('UTC').toDate();
+
+data.date=date
+data.reportType=report
 }
 
-console.log(dateData,'date-data s');
 
 const config={
   headers:{
@@ -78,9 +81,9 @@ const config={
 
   try{
 
-    const url=`${prefix}/products/fetch-sales/${date}/${report}`
+    const url=`${prefix}/products/fetch-sales`
 
-    const response=  await axios.get(url,{withCredentials:true})
+    const response=  await axios.post(url,data,config)
 
     console.log(response,'responsa');
 
