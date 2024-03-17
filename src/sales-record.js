@@ -553,7 +553,7 @@ style={{width:"90vw",backgroundColor:''}}
       <div className='sales-header'> Quantity</div>
       <div className='sales-header'>Price/Unit(&#x20A6;)</div>
       <div className='sales-header'>Cost(&#x20A6;)</div>
-      <div className='sales-header'> Date</div>
+      <div className='sales-header'> Time</div>
       
       <div className='sales-header'>Closed By</div>
       <div className='sales-header'>Delete</div>
