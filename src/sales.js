@@ -877,6 +877,26 @@ resetFinalScore()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const resetLoadingText=()=>{
 
   const t= setTimeout(()=>{
@@ -899,7 +919,7 @@ const recordSales=async(data,id,)=>{
 
 
 
-  console.log(transactionDate,'transaction-date laf');
+
 
   
  
@@ -907,7 +927,11 @@ const recordSales=async(data,id,)=>{
   data.date= transactionDate
  }
  
+else{
+  setMessage('Please choose a transaction date')
 
+  return
+}
  
  const config={
   headers:{
@@ -922,7 +946,6 @@ const recordSales=async(data,id,)=>{
  try{
  
   const response= await axios.post(url,data,config)
-console.log(response,'reponse for record sales');
  
  }
  
