@@ -223,14 +223,14 @@ const inputPackages=document.querySelectorAll('.package')
   
   const inputPpu=document.querySelectorAll('.ppu')
 
-  const ppu=   Array.from(inputPpu).map((input)=>parseInt(input.value)).filter((numbers)=>numbers!==0)
+  const ppu=   Array.from(inputPpu).map((input)=>parseFloat(input.value)).filter((numbers)=>numbers!==0)
 
 
 
   
   const inputQuantity=document.querySelectorAll('.quantity')
 
-  const quantity=   Array.from(inputQuantity).map((input)=>parseInt(input.value)).filter((numbers)=>numbers!==0)
+  const quantity=   Array.from(inputQuantity).map((input)=>parseFloat(input.value)).filter((numbers)=>numbers!==0)
 
 
   
@@ -245,6 +245,7 @@ const inputPackages=document.querySelectorAll('.package')
 
 
   const inputData= cost.concat(packages,ppu,quantity,id,name)
+
 
   setCollatedData(inputData)
 
@@ -857,6 +858,8 @@ setLowFinalCost(false)
 
 const callArrangeCost=()=>{
 
+
+
 if(finalCost<=0){
 
   setLowFinalCost(true)
@@ -866,6 +869,7 @@ resetFinalScore()
 
 
  const data= arrangeCostData(collatedData)
+
 
  setCostData(data)
 
