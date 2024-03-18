@@ -1188,6 +1188,11 @@ border: solid 0.1em;
   
 }
 
+.sales-name{
+ 
+  font-size: 0.9vw;
+}
+
 
 .sales-delete-btn-container{
   width: 100%;
@@ -2453,7 +2458,11 @@ border: solid 1px black;
 
  
 
-
+  .sales-name{
+ 
+    font-size: 1.2vw;
+  }
+  
 
 
   .login-modal{
@@ -3447,6 +3456,12 @@ height: auto;
 
 @media screen and  (max-width:700px){
 
+
+  .sales-name{
+ 
+    font-size: 1.2vw;
+  }
+
   .sales-table-container{
 
     font-size: 0.6em;
@@ -3478,7 +3493,10 @@ height: auto;
 
  
 
-
+  .sales-name{
+ 
+    font-size: 2.2vw;
+  }
 
 
   .login-modal{
@@ -4476,7 +4494,7 @@ height: auto;
   height: 25px;
   display: grid;
   background-color:white;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(9, 1fr);
   grid-column-gap: 0.2em;
   
 
@@ -4485,7 +4503,7 @@ height: auto;
 
 .sales-info{
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(9, 1fr);
   grid-column-gap: 0.2em;
   width: 180%;
 
@@ -4747,7 +4765,9 @@ height: auto;
 
 
  
-
+  .sales-name{
+ 
+  }
 
 
 
@@ -5762,7 +5782,7 @@ height: auto;
   height: 25px;
   display: grid;
   background-color:white;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(9, 1fr);
   grid-column-gap: 0.2em;
   
 
@@ -5771,7 +5791,7 @@ height: auto;
 
 .sales-info{
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(9, 1fr);
   grid-column-gap: 0.2em;
   width: 200%;
 
