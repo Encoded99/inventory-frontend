@@ -352,7 +352,7 @@ fetchUnwindAllProducts()
 
  <div style={{display:'flex',width:"100%",}}>
  <p style={{color:'red',fontWeight:"500"}}>Total Quantity (pieces)</p>
- <p style={{color:'',fontWeight:"500",marginLeft:"8%"}}>{inventoryQuantity}</p>
+ <p style={{color:'',fontWeight:"500",marginLeft:"8%"}}>{inventoryQuantity.toFixed(2)}</p>
  </div>
 
 
