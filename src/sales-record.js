@@ -605,7 +605,7 @@ let quantity=salesData.quantity
   <div className='sales-info' key={keys}  style={{border:salesData._id===salesId?'solid red 2px':''}} data-id={salesData._id} data-pr={salesData.product}>
    
   <div className='sales-element' data-id={salesData._id} data-pr={salesData.product}>{item.sku}</div>
-  <div  className='sales-element sales-name' data-id={salesData._id} data-pr={salesData.product}>{item.name.length<25 ?   item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase():item.name.charAt(0).toUpperCase() + item.name.slice(1,25).toLowerCase() + '..'}</div>
+  <div  className='sales-element sales-name' data-id={salesData._id} data-pr={salesData.product}>{item.name.length<19 ?   item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase():item.name.charAt(0).toUpperCase() + item.name.slice(1,19).toLowerCase() + '..'}</div>
   <div  className='sales-element' data-id={salesData._id} data-pr={salesData.product}>{item.salesData.packages.charAt(0).toUpperCase() + item.salesData.packages.slice(1).toLowerCase()}</div>
   <div  className='sales-element'>{quantity}</div>
   <div  className='sales-element' data-id={salesData._id} data-pr={salesData.product}>{item.salesData.ppu}</div>
@@ -621,7 +621,7 @@ let quantity=salesData.quantity
       <>
       <div  className='sales-element sale-date' data-id={salesData._id} data-pr={salesData.product}   style={{fontWeight:'bolder'}}> 
 
-      <AiOutlineDelete  size={24}  data-id={salesData._id} data-pr={salesData.product} onClick={deleteSales}></AiOutlineDelete>
+      <AiOutlineDelete  size={24}  data-id={salesData._id} data-pr={salesData.product} onClick={deleteSales} style={{cursor:"pointer"}}></AiOutlineDelete>
   </div>
       
       </>
