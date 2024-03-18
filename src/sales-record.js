@@ -50,6 +50,7 @@ const [salesXaxis,setSalesXaxis]= useState([])
 const [salesYaxis,setSalesYaxis]= useState([])
 const [isDeleteShown,setIsDeleteShown]= useState(false)
 const [salesId,setSalesId] =useState('')
+const [prId,setPrId] =useState('')
 const [message,setMessage] =useState('')
 const [userRole,setUserRole]= useState('')
 
@@ -234,11 +235,28 @@ useEffect(()=>{
 
 
 },[date])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const deleteSales=(e)=>{
-  const id=e.target.dataset.id
+  const id = e.currentTarget.dataset.id;
+  const pr = e.currentTarget.dataset.pr;
 
   setIsDeleteShown(true)
   setSalesId(id)
+  setPrId(pr)
 }
 
 
@@ -250,6 +268,13 @@ const handleDelete= async()=>{
 
   setMessage('Please wait...')
 
+if (prId===undefined || salesId===undefined){
+  setMessage('error deleting product please try again')
+  return
+}
+
+
+
   const config={
     headers:{
      'Content-Type': 'application/json',
@@ -259,12 +284,13 @@ const handleDelete= async()=>{
 
 
    try{
-    const url =`${prefix}/products/delete-sales/${salesId}`
+    const url =`${prefix}/products/delete-sales/${salesId}/${prId}`
     const response= await axios.delete(url,config)
     
     if(response.status===200){
       setSalesRecordData((prev)=>prev.filter(({salesData})=>salesData._id!==salesId))
       setIsDeleteShown(false)
+      setMessage('')
     }
     
 
@@ -389,7 +415,7 @@ fetchProfile()
   <div className='delete-button-container'>
 
     <button className='btn btn-danger'   onClick={handleDelete}>Yes</button>
-    <button className='btn btn-secondary'  onClick={()=>setIsDeleteShown(false)}>No</button>
+    <button className='btn btn-secondary'  onClick={()=>{setIsDeleteShown(false);setPrId('');setSalesId('')}}>No</button>
 
 
   </div>
@@ -576,32 +602,32 @@ let quantity=salesData.quantity
  return(
   <>
 
-  <div className='sales-info' key={keys}  style={{border:salesData._id===salesId?'solid red 2px':''}}>
+  <div className='sales-info' key={keys}  style={{border:salesData._id===salesId?'solid red 2px':''}} data-id={salesData._id} data-pr={salesData.product}>
    
-  <div className='sales-element'>{item.sku}</div>
-  <div  className='sales-element sales-name'>{item.name.length<25 ?   item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase():item.name.charAt(0).toUpperCase() + item.name.slice(1,25).toLowerCase() + '..'}</div>
-  <div  className='sales-element'>{item.salesData.packages.charAt(0).toUpperCase() + item.salesData.packages.slice(1).toLowerCase()}</div>
+  <div className='sales-element' data-id={salesData._id} data-pr={salesData.product}>{item.sku}</div>
+  <div  className='sales-element sales-name' data-id={salesData._id} data-pr={salesData.product}>{item.name.length<25 ?   item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase():item.name.charAt(0).toUpperCase() + item.name.slice(1,25).toLowerCase() + '..'}</div>
+  <div  className='sales-element' data-id={salesData._id} data-pr={salesData.product}>{item.salesData.packages.charAt(0).toUpperCase() + item.salesData.packages.slice(1).toLowerCase()}</div>
   <div  className='sales-element'>{quantity}</div>
-  <div  className='sales-element'>{item.salesData.ppu}</div>
-  <div  className='sales-element'>{quantity*item.salesData.ppu}</div>
-  <div  className='sales-element sale-date' style={{fontWeight:'bolder'}}>{momentTime}</div>
+  <div  className='sales-element' data-id={salesData._id} data-pr={salesData.product}>{item.salesData.ppu}</div>
+  <div  className='sales-element'  data-id={salesData._id} data-pr={salesData.product}>{quantity*item.salesData.ppu}</div>
+  <div  className='sales-element sale-date' style={{fontWeight:'bolder'}} data-id={salesData._id} data-pr={salesData.product}>{momentTime}</div>
 
-  <div  className='sales-element '>{salesData.createdBy?salesData.createdBy.firstName.charAt(0).toUpperCase() + salesData.createdBy.firstName.slice(1).toLowerCase():"N/A"}</div>
+  <div  className='sales-element '   data-id={salesData._id} data-pr={salesData.product}>{salesData.createdBy?salesData.createdBy.firstName.charAt(0).toUpperCase() + salesData.createdBy.firstName.slice(1).toLowerCase():"N/A"}</div>
 
  
   
   {
      userRole==='admin' ? (
       <>
-      <div  className='sales-element sale-date' style={{fontWeight:'bolder'}}> 
+      <div  className='sales-element sale-date' data-id={salesData._id} data-pr={salesData.product}   style={{fontWeight:'bolder'}}> 
 
-      <AiOutlineDelete  size={24}  data-id={salesData._id}  onClick={deleteSales}></AiOutlineDelete>
+      <AiOutlineDelete  size={24}  data-id={salesData._id} data-pr={salesData.product} onClick={deleteSales}></AiOutlineDelete>
   </div>
       
       </>
      ):(
       <>
-    <div className='sales-element'>
+    <div className='sales-element'   data-id={salesData._id} data-pr={salesData.product}>
 
       N/A
 
