@@ -357,7 +357,7 @@ if(inventoryData.length!==0){
 
 <div className='inventory-properties'  data-id={_id}>{sku}</div>
 <div  className='inventory-properties' data-id={_id}>{name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()}</div>
-<div  className='inventory-properties' data-id={_id}>{inventoryData?(allQuantity/upb).toFixed(1):"OOS"}</div>
+<div  className='inventory-properties' data-id={_id}>{inventoryData?(allQuantity/upb).toFixed(2):"OOS"}</div>
 <div  className='inventory-properties' data-id={_id}>{inventoryData?allQuantity.toFixed(2):'OOS'}</div>
 <div  className='inventory-properties' data-id={_id}>{inventoryData.length!==0?   moment.utc(minimumExpirydate).tz('Africa/Lagos').format('DD/MM/YYYY'):'N/A'  }</div>
 
