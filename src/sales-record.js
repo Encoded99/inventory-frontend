@@ -607,9 +607,9 @@ let quantity=salesData.quantity
   <div className='sales-element' data-id={salesData._id} data-pr={salesData.product}>{item.sku}</div>
   <div  className='sales-element sales-name' data-id={salesData._id} data-pr={salesData.product}>{item.name.length<19 ?   item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase():item.name.charAt(0).toUpperCase() + item.name.slice(1,19).toLowerCase() + '..'}</div>
   <div  className='sales-element' data-id={salesData._id} data-pr={salesData.product}>{item.salesData.packages.charAt(0).toUpperCase() + item.salesData.packages.slice(1).toLowerCase()}</div>
-  <div  className='sales-element'>{quantity}</div>
-  <div  className='sales-element' data-id={salesData._id} data-pr={salesData.product}>{item.salesData.ppu}</div>
-  <div  className='sales-element'  data-id={salesData._id} data-pr={salesData.product}>{quantity*item.salesData.ppu}</div>
+  <div  className='sales-element'>{quantity.toFixed(2)}</div>
+  <div  className='sales-element' data-id={salesData._id} data-pr={salesData.product}>{item.salesData.ppu.toFixed(2)}</div>
+  <div  className='sales-element'  data-id={salesData._id} data-pr={salesData.product}>{(quantity*item.salesData.ppu).toFixed(2)}</div>
   <div  className='sales-element sale-date' style={{fontWeight:'bolder'}} data-id={salesData._id} data-pr={salesData.product}>{momentTime}</div>
 
   <div  className='sales-element '   data-id={salesData._id} data-pr={salesData.product}>{salesData.createdBy?salesData.createdBy.firstName.charAt(0).toUpperCase() + salesData.createdBy.firstName.slice(1).toLowerCase():"N/A"}</div>
