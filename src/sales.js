@@ -204,7 +204,7 @@ const totalCalculate=()=>{
   
   const inputCost=document.querySelectorAll('.cost')
 
-  const cost=   Array.from(inputCost).map((input)=>parseInt(input.value)).filter((numbers)=>numbers!==0)
+  const cost=   Array.from(inputCost).map((input)=>parseFloat(input.value)).filter((numbers)=>numbers!==0)
 
 
 
