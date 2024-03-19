@@ -1185,16 +1185,16 @@ border: solid 0.1em;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  min-height: 10vh;
+  text-align: center;
+  min-height: 12vh;
 }
 
 .sales-name{
  
   font-size: 0.9vw;
  display: flex;
- justify-content: flex-start;
- padding: 25%;
+ justify-content: center;
+ 
   font-weight: bold;
 }
 
