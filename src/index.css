@@ -1100,7 +1100,7 @@ border: solid 0.1em;
 
 .sales-table-header-container{
   width: 100%;
-  height: 25px;
+  height: auto;
   display: grid;
   background-color:white;
   grid-template-columns: repeat(9, 1fr);
