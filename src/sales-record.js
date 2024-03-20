@@ -53,12 +53,12 @@ const [salesId,setSalesId] =useState('')
 const [prId,setPrId] =useState('')
 const [message,setMessage] =useState('')
 const [userRole,setUserRole]= useState('')
-
+const [sortOption,setSortOption]=useState('')
+const [firstSalesdata,setFirstSalesData]= useState([])
 const reportType='day'
 
 
-
-
+const navigate= useNavigate()
 
 
 const fetchSales= async(date,report,)=>{
@@ -80,10 +80,9 @@ const fetchSales= async(date,report,)=>{
   
       const response=  await axios.get(url,{withCredentials:true})
   
-      const t= response.data
-  
+     
       
-  
+      setFirstSalesData([...response.data])
       setSalesRecordData(response.data)
   
       const structuredCostArray =response.data.map((item)=>{
@@ -186,9 +185,7 @@ const fetchSales= async(date,report,)=>{
       const createdAt= response.data.map((item)=>moment.utc(item.salesData.createdAt).tz('Africa/Lagos').format(' HH:mm:ss ')   )
       //const createdAts=moment.utc()
    
-  
-  const reversedCreatedAt=createdAt.reverse()
-  const reversedCostSold= costSold.reverse()
+ 
    
   
   
@@ -208,10 +205,84 @@ const fetchSales= async(date,report,)=>{
     
   
     }
+
+
+
+    finally{
+      setSortOption('')
+    }
   }
   
   
+  const Sort = (e) => {
+    const selectedOption = e.target.value;
   
+    setSortOption(selectedOption); 
+
+
+
+
+  if (selectedOption === 'res') {
+    
+
+     setSalesRecordData([...firstSalesdata])
+
+     
+ return
+   
+  }
+  
+
+
+
+    
+    if (selectedOption === 'alph') {
+      setSalesRecordData(salesRecordData.sort((a, b) => {
+        const first = a.name.toUpperCase();
+        const second = b.name.toUpperCase();
+  
+        return first.localeCompare(second);
+      }));
+    }
+    
+
+ // Manually trigger sorting based on the selected option
+ if (selectedOption === 'sku') {
+  setSalesRecordData(salesRecordData.sort((a, b) => {
+    const first = a.sku.toUpperCase();
+    const second = b.sku.toUpperCase();
+
+    return first.localeCompare(second);
+  }));
+}
+
+if (selectedOption === 'hc') {
+  setSalesRecordData(salesRecordData.sort((a, b) => {
+    const first = a.salesData.cost;
+    const second = b.salesData.cost;
+
+    return second-first;
+  }));
+}
+
+
+if (selectedOption === 'lc') {
+  setSalesRecordData(salesRecordData.sort((a, b) => {
+    const first = a.salesData.cost;
+    const second = b.salesData.cost;
+
+    return first-second;
+  }));
+}
+
+
+
+
+
+
+
+
+  };
   
 
 
@@ -340,6 +411,10 @@ const fetchProfile = async () => {
     const response = await axios.get(url, config);
  
 
+    if(response.status==400){
+      navigate('/')
+    }
+
     
 
     const profileData = response.data.data.data;
@@ -372,6 +447,24 @@ const fetchProfile = async () => {
 useEffect(()=>{
 fetchProfile()
 },[])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -548,7 +641,41 @@ style={{width:"90vw",backgroundColor:''}}
 <section className='sale-list-container'>
      <div className='sale-list-first-section'>
      <strong className='sale-list-heading'>Sales List</strong>
+
+  
+
+
+
      </div>
+
+
+
+
+
+     <select name="" id=""  className='form-select inventory-select' style={{width:'auto',border:'solid 1.0px black',margin:'1em'}}  value={sortOption}  onChange={Sort} >
+
+<option value="" className='form-select-option'>SORT</option>
+<option value="res"   className='form-select-option'>RESET</option>
+<option value="alph"   className='form-select-option'>SORT BY ALPHABETICAL ORDER</option>
+<option value="sku"  className='form-select-option'>SORT BY PRODUCT ID</option>
+<option value="hc"   className='form-select-option'>SORT BY HIGHEST COST</option>
+<option value="lc"  className='form-select-option'>SORT BY LOWEST  COST</option>
+
+
+
+</select>
+
+
+
+
+
+
+
+
+
+
+
+
      <div className='sale-list-second-section'>
       <div className='sale-date-container'>
        <p className='sale-header'>Sale Date</p>
