@@ -16,7 +16,7 @@ import { Vortex } from 'react-loader-spinner';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { Response } from './lay-out';
 import LayOut from './lay-out';
-
+import { EmailReminder } from './verify-email';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { width } from '@fortawesome/free-solid-svg-icons/fa0';
@@ -34,7 +34,7 @@ const dateValue = new Date(timestampInSeconds * 1000);
 
 const Register = () => {
 
-  const {prefix,setLoadingMessage,loadingMessage,resetLoadingText,apiError,setApiError,shopGroup,shopDetails,subType}=useGlobal()
+  const {prefix,setLoadingMessage,loadingMessage,resetLoadingText,apiError,setApiError,shopGroup,shopDetails,subType,  setProductUpdate,userVemail,setShowReminder,showReminder,subTrial}=useGlobal()
 const [isConfirmHidden, setIsConfirmHidden]=useState(true)
   const [files, setFiles] = useState([]);
   const [src,setSrc]=useState([])
@@ -75,55 +75,7 @@ const [chatId,setChatId]=useState("")
 
 
 
-  const fetchProfile = async () => {
-
-  
-  
-    try {
-     
-  
-  
-  
-      const url = `${prefix}/users/my-profile`;
-  
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      };
-  
-      const response = await axios.get(url, config);
-   
-  
-      
-  
-      const profileData = response.data.data.data;
-    
-         setUserRole(profileData.role)
-    
-  
-
-      
-    } catch (error) {
-   
-  
-  
-  
-  
-  
-  
-  
-     
-       
-  
-  
-      
-    } finally {
-
-    }
-  };
-  
+ 
   
   
   
@@ -327,6 +279,18 @@ if (shopGroup==='group-2'){
 const handleConfirm=()=>{
 
   setLoadingMessage('')
+
+
+
+if (!userVemail && subTrial===false){
+
+  setShowReminder(true)
+
+  return
+
+}
+
+
  
   if (subType==='inactive' || !subType){
   
@@ -467,7 +431,6 @@ const handleSubmit=async()=>{
   const data= Object.fromEntries(Object.entries(SourceData).filter(([_,value])=>value!=='' && value!==null && value))
 
 
-  console.log(data,'post-malone')
 
   for(const keys in data.seller){
     if (data.seller[keys]==''){
@@ -485,7 +448,6 @@ if (shopGroup==='group-2'){
   delete data.price.piecesPrice
 }
 
-  console.log(data,'post-malone after')
 
 
   if (transactionDate===null){
@@ -501,7 +463,6 @@ if (shopGroup==='group-2'){
 
   
  
-  console.log(data,'fini')
 setIsSpinning(true)
 
 
@@ -521,11 +482,9 @@ const config={
 
 try{
 
-  console.log('thailand  about to be it sent')
 const response=await axios.post(url,data,config,)
 
 
-console.log('thailand it sent')
 
 if(response.status===201){
   setApiError(false)
@@ -553,7 +512,7 @@ setTransactionDate(null)
 setHasSubmitButtonClicked(false)
 setSeller({name:'',address:'',telephone:""})
 }
-
+setProductUpdate(true)
 
 
 
@@ -563,7 +522,6 @@ setSeller({name:'',address:'',telephone:""})
 catch(error){
 
 
-  console.log(error, 'thailand')
   setApiError(true)
   if (error.response) {
    
@@ -607,7 +565,13 @@ finally{
 
 
 
-
+if (showReminder){
+  return(
+    <>
+    <EmailReminder></EmailReminder>
+    </>
+  )
+}
 
 
 
@@ -814,7 +778,7 @@ finally{
 
 <article className='register-each-partition' >
 <div  className='management-register-text'  >Product ID(SKU)* 
- <div className='indicator-span'> <FontAwesomeIcon  onMouseEnter={()=>{
+  <div className='indicator-span'> <FontAwesomeIcon  onMouseEnter={()=>{
   setChatId('sku')
 }}
 
@@ -828,7 +792,7 @@ style={{color:'grey',cursor:'pointer'}} icon={faQuestionCircle} />
     <>
     <div class="reg-chat-box">
   <div class="reg-pointer"></div>
-  <div class="reg-message">The SKU (Stock Keeping Unit) is a unique identifier assigned to each product. It should be unique and not coincide with any other SKU in your inventory</div>
+  <div class="reg-message">The SKU (Stock Keeping Unit) is a unique identifier assigned to each product. It should be unique and not coincide with any other SKU in your inventory, you will be the one to create it</div>
 </div>
     </>
   )
@@ -877,7 +841,7 @@ style={{color:'grey',cursor:'pointer'}} icon={faQuestionCircle} />
     <>
     <div class="reg-chat-box">
   <div class="reg-pointer"></div>
-  <div class="reg-message">Unit per bulk UPB represents the number of individual units or items contained within a bulk package.  <span> {  shopDetails.industry==='Provision/Drinks/Pharmaceuticals'?"For example,a crate of coke can have 12 bottles of coke in it,making it UPB to be 12":  shopDetails.industry === 'Books and Stationaries'?"For example,a pack of pencil can  have 12 pencils in it,making it UPB to be 12":"For example,a  bale  of t-shirt can  have 20 t-shirts in it,making it UPB to be 20"}</span> this information is neccessary for user who sell in seocndary unit, i.e in pieces.</div>
+  <div class="reg-message">Unit per bulk UPB represents the number of individual units or items contained within a bulk package.  <span> {  shopDetails.industry==='Provision/Drinks/Pharmaceuticals'?"For example,a crate of coke can have 12 bottles of coke in it,making it UPB to be 12":  shopDetails.industry === 'Books and Stationaries'?"For example,a pack of pencil can  have 12 pencils in it,making it UPB to be 12":"For example,a  bale  of t-shirt can  have 20 t-shirts in it,making it UPB to be 20"}</span> this information is neccessary for user who sell in secondary unit, i.e in pieces.</div>
 </div>
     </>
   )
@@ -948,18 +912,47 @@ className={
 
 
 {
-   shopDetails.industry === 'Provision/Drinks/Pharmaceuticals' && (
+  shopDetails.industry === 'Plastics and Nylon' && (
     <>
-    <option value=""></option>
-
-<option value={'Groceries'}>Groceries</option>
-<option value={'Drinks'}>Drinks</option>
-<option value={'Biscuits/Snacks'}>Biscuits/Snacks</option>
-<option value={'Biscuits/Snacks'}>Drugs/Pharmaceuticals</option>
-    
+      <option value=""></option>
+      <option value={'Plastic Containers'}>Plastic Containers</option>
+      <option value={'Plastic Bags'}>Plastic Bags</option>
+      <option value={'Nylon Bags'}>Nylon Bags</option>
+      <option value={'Plastic Household Items'}>Plastic Household Items</option>
+      <option value={'Industrial Plastics'}>Industrial Plastics</option>
+      <option value={'Packaging Materials'}>Packaging Materials</option>
+      <option value={'Recycled Plastics'}>Recycled Plastics</option>
+      <option value={'Others'}>Others</option>
     </>
   )
 }
+
+{
+  shopDetails.industry === 'Provision/Drinks/Pharmaceuticals' && (
+    <>
+      <option value=""></option>
+      <option value={'Groceries'}>Groceries</option>
+      <option value={'Drinks'}>Drinks</option>
+      <option value={'Biscuits/Snacks'}>Biscuits/Snacks</option>
+      <option value={'Drugs/Pharmaceuticals'}>Drugs/Pharmaceuticals</option>
+      <option value={'Cosmetics & Personal Care'}>Cosmetics & Personal Care</option>
+      <option value={'Body Creams/Lotions/Vaselines'}>Body Creams/Lotions/Vaselines</option>
+      <option value={'Hair Care'}>Hair Care</option>
+      <option value={'Hair Wigs'}>Hair Wigs</option>
+      <option value={'Soaps & Cleansers'}>Soaps & Cleansers</option>
+      <option value={'Oral Care'}>Oral Care</option>
+      <option value={'Feminine Hygiene'}>Feminine Hygiene</option>
+      <option value={'Household Items'}>Household Items</option>
+      <option value={'Baby Products'}>Baby Products</option>
+      <option value={'Health Supplements'}>Health Supplements</option>
+      <option value={'Others'}>Others</option>
+    </>
+  )
+}
+
+
+
+
 
 {
   shopDetails.industry === 'Electronics/Phones/Computers' && (
@@ -993,10 +986,84 @@ className={
       <option value={'Underwear'}>Underwear</option>
       <option value={'Sportswear'}>Sportswear</option>
       <option value={'Fabrics'}>Fabrics</option>
-      
+      <option value={'Others'}>Others</option>
     </>
   )
 }
+
+{
+  shopDetails.industry === 'Construction and building materials' && (
+    <>
+      <option value=""></option>
+      <option value={'Construction Tools'}>Construction Tools</option>
+      <option value={'Cement and Concrete'}>Cement and Concrete</option>
+      <option value={'Bricks and Blocks'}>Bricks and Blocks</option>
+      <option value={'Roofing Materials'}>Roofing Materials</option>
+      <option value={'Tiles and Flooring'}>Tiles and Flooring</option>
+      <option value={'Doors and Windows'}>Doors and Windows</option>
+      <option value={'Plumbing Materials'}>Plumbing Materials</option>
+      <option value={'Electrical Wiring and Fittings'}>Electrical Wiring and Fittings</option>
+      <option value={'Paint and Painting Supplies'}>Paint and Painting Supplies</option>
+      <option value={'Hardware and Fasteners'}>Hardware and Fasteners</option>
+      <option value={'Others'}>Others</option>
+    </>
+  )
+}
+
+
+
+
+
+
+{
+  shopDetails.industry === 'Interior Design and Furnitures' && (
+    <>
+      <option value=""></option>
+      <option value={'Furniture'}>Furniture</option>
+      <option value={'Home Decor'}>Home Decor</option>
+      <option value={'Lighting'}>Lighting</option>
+      <option value={'Rugs and Carpets'}>Rugs and Carpets</option>
+      <option value={'Wall Art'}>Wall Art</option>
+      <option value={'Curtains and Blinds'}>Curtains and Blinds</option>
+      <option value={'Outdoor Furniture'}>Outdoor Furniture</option>
+      <option value={'Accessories'}>Accessories</option>
+      <option value={'Others'}>Others</option>
+    </>
+  )
+}
+{
+  shopDetails.industry === 'Automobile Parts' && (
+    <>
+      <option value=""></option>
+      <option value={'Engine Parts'}>Engine Parts</option>
+      <option value={'Brakes and Suspension'}>Brakes and Suspension</option>
+      <option value={'Transmission'}>Transmission</option>
+      <option value={'Exhaust System'}>Exhaust System</option>
+      <option value={'Electrical Components'}>Electrical Components</option>
+      <option value={'Tires and Wheels'}>Tires and Wheels</option>
+      <option value={'Interior Accessories'}>Interior Accessories</option>
+      <option value={'Exterior Accessories'}>Exterior Accessories</option>
+      <option value={'Others'}>Others</option>
+    </>
+  )
+}
+{
+  shopDetails.industry === 'Books and Stationaries' && (
+    <>
+      <option value=""></option>
+      <option value={'Books'}>Books</option>
+      <option value={'Notebooks'}>Notebooks</option>
+      <option value={'Writing Instruments'}>Writing Instruments</option>
+      <option value={'Office Supplies'}>Office Supplies</option>
+      <option value={'School Supplies'}>School Supplies</option>
+      <option value={'Art Supplies'}>Art Supplies</option>
+      <option value={'Calendars and Planners'}>Calendars and Planners</option>
+      <option value={'Storage and Organization'}>Storage and Organization</option>
+      <option value={'Others'}>Others</option>
+    </>
+  )
+}
+
 
         
 
@@ -2088,7 +2155,7 @@ style={{color:'grey',cursor:'pointer'}} icon={faQuestionCircle} />
 }
 
 {
-(subType==='inactive' ) && (
+(subType==='inactive' && hasSubmitButtonClicked ) && (
 <>
 <div className={ 'alert alert-danger'  } style={{fontWeight:'700',margin:"2vh 0"}}>
 You dont have active subscription
